@@ -24,16 +24,16 @@ int main() {
 class file {
 public: 
 
-  int writeString(const char * fileName, const std::string& string, const int sizeOfBuffer) {
+  int writeString(const char * fileName, const std::string& string) {
 
-    void* buffer = static_cast<void*>(&string);
+    const void* buffer = reinterpret_cast<const void*>(string.c_str());
 
     FILE *file = std::fopen(fileName, "w");
 
     if(!file) {
       return EXIT_FAILURE;
     }
-    std::fwrite(buffer, sizeof(char), sizeof(buffer), file);
+    std::fwrite(buffer, sizeof(char),string.size() , file);
   };
 
 private:  
@@ -43,8 +43,8 @@ private:
 
 int main() {
   file newFile;
-  newFile.writeString("example.dat", "Hello!",3);
-
+  newFile.writeString("example.dat", "Hello!");
+  
 
   /*
   FILE *file = std::fopen("inventory.dat", "rb+");
