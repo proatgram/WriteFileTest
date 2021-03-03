@@ -33,7 +33,7 @@ public:
     if(!file) {
       return EXIT_FAILURE;
     }
-    std::fwrite(buffer, sizeof(char), sizeof(string), file);
+    std::fwrite(buffer, sizeof(char), sizeof(buffer), file);
   };
 
 private:  
