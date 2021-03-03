@@ -34,6 +34,8 @@ public:
       return EXIT_FAILURE;
     }
     std::fwrite(buffer, sizeof(char),string.size() , file);
+    fclose(buffer);
+    return EXIT_SUCCESS
   };
 
 private:  
