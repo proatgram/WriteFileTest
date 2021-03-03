@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <string>
+#include <cstring>
 /*
 int main() {
   int data;
@@ -40,13 +41,15 @@ public:
   int writeRaw(const char * fileName, const int rawArray[]) {
     
     FILE *file = std::fopen(fileName, "wb+");
-
+    if(!file) {
+      return EXIT_FAILURE;
+    }
     for (int times = 0; times != 2; times++) {
-      int data = rawArray[times];
+      void* data = reinterpret_cast<void*>(rawArray[times]);
       printf("%d",data);
-      void* buffer = (void*)data;
-      //const void* buffer = reinterpret_cast<const void*>(data);
-      std::fwrite(buffer, sizeof(int), sizeof(rawArray), file);
+      //void* buffer = (void*)data;
+      const void* buffer = reinterpret_cast<const void*>(data);
+      std::fwrite(buffer, sizeof(int), 1, file);
     }
 
     //std::fwrite(buffer, sizeof(int), 2, file);
@@ -63,7 +66,7 @@ int main() {
   file newFile;
   newFile.writeString("example.dat", "Hello World");
   int testArray[] = {0x01,0x02};
-  newFile.writeRaw("example.dat",testArray);
+  newFile.writeRaw("example1.dat",testArray);
 
   /*
   FILE *file = std::fopen("inventory.dat", "rb+");
