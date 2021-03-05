@@ -24,7 +24,7 @@ int main() {
 }
 */
 
-class file {
+class rrFile {
 public:
 
     int writeString(const char* fileName, const std::string& string) {
@@ -47,8 +47,8 @@ public:
         if (!file) {
             return EXIT_FAILURE;
         }
-        for (uint32_t i = 0; i < arraySize; i++)
-            printf("0x%x \n", rawArray[i]);
+        
+        
 
         fwrite(reinterpret_cast<const void*>(rawArray), 1, arraySize, file);
 
@@ -85,16 +85,13 @@ private:
 };
 
 int main() {
-    file newFile;
+    rrFile newFile;
     newFile.writeString("example.dat", "Hello World");
     const uint8_t testArray[] = { 0x01, 0x02, 0x03 };
     newFile.writeRaw("example1.dat", testArray, sizeof(testArray));
-    const uint8_t testArrayTwo[] = { 0x04, 0x05, 0x06 };
-    newFile.writeRaw("example1.dat", testArrayTwo, sizeof(testArrayTwo));
-    std::vector<uint8_t>* vector = newFile.readRaw("example1", 5);
-    printf("%x\n",vector);
+    std::vector<uint8_t>* vector = newFile.readRaw("example1.dat", 5);
     for (int times = 0x00; times != vector->size(); times++){
-      printf("0x%x\n",vector->at(times));
+      printf("0x%x\n",(vector->at(times)));
     }
     /*
     FILE *file = std::fopen("inventory.dat", "rb+");
