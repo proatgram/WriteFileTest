@@ -3,7 +3,7 @@
 #include <cstring>
 #include <cstdint>
 #include <vector>
-
+#include <errno.h>
 
 /*
 int main() {
@@ -61,6 +61,8 @@ public:
       
       if (!file) {
         contents->push_back(0x01);
+        printf("Error opening the file errno: (%d: %s)\n", 
+          errno, strerror(errno));
         return contents;
       }
       
