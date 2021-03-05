@@ -5,24 +5,6 @@
 #include <vector>
 #include <errno.h>
 
-/*
-int main() {
-  int data;
-  std::ofstream newFileWrite;
-  newFileWrite.open("inventory.dat", std::ios::app);
-  newFileWrite << 0xA0 << ",";
-  newFileWrite.close();
-  std::ifstream newFileRead;
-  newFileRead.open("inventory.dat");
-  newFileRead >> data;
-  std::printf("%x\n", data);
-  switch (data*) {
-    case ",":
-      break;
-  }
-  newFileRead.close();
-}
-*/
 
 class rrFile {
 public:
@@ -40,7 +22,13 @@ public:
         std::fclose(file);
         return EXIT_SUCCESS;
     };
-
+    std::string readString(const char* fileName) {
+      FILE* file = std::fopen(fileName, "r");
+      if (!file) {
+        return EXIT_FAILURE;
+      }
+      
+    }
     int writeRaw(const char* fileName, const uint8_t* rawArray, const uint32_t arraySize) {
 
         FILE* file = std::fopen(fileName, "wb");
