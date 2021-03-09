@@ -31,6 +31,26 @@ int rrFile::closeFile() {
 	m_file = nullptr;
 	return EXIT_SUCCESS;
 }
+int rrFile::removeFile(const char *fileName) {
+  if (remove(fileName) != 0x00) {
+    return EXIT_FAILURE;
+  }
+  else {
+    return EXIT_SUCCESS;
+  }
+}
+int rrFile::flushStream() {
+  if (std::fflush(m_file) != 0x00) {
+    if (feof(m_file) != 0x00) {
+      if (std::ferror(m_file) != 0x00) {
+        return 0x01;
+      }
+      return EOF;
+    }
+    return 0x02;
+  }
+  return EXIT_SUCCESS;
+}
 int rrFile::writeString(const std::string& string, const int offset, const bool freturn) {
 	const uint8_t zero = 0x00;
 	const void* buffer = reinterpret_cast<const void*>(string.c_str());
