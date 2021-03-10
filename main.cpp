@@ -11,9 +11,13 @@ int main() {
   rrFile file;
   if (file.openFile("example.dat") == EXIT_FAILURE) {
     file.createFile("example.dat");
+    file.openFile("example.dat");
   }
-  file.writeInt(0xFFFFFFFF, -1, false);
-  file.writeInt(0xAAFEFFEF, -1, false);
+  else {
+    file.openFile("example.dat");
+  }
+  file.writeInt(0xFFFFFFFF, -1, true);
+
   file.closeFile();
   return 0;
 }
