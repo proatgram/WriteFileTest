@@ -174,20 +174,26 @@ int rrFile::writeInt(const int byte, const int offset, const bool freturn) {
 		if (freturn == true) {
 			m_returnOffset = ftell(m_file);
 		}
-		std::fwrite(reinterpret_cast<const void*>(byte), sizeof(int), 1, m_file);
-		if (freturn == true) {
-			std::fseek(m_file, m_returnOffset, SEEK_SET);
-		}
+    int buffer[1];
+    buffer[0] = byte;
+    const void* data = reinterpret_cast<const void*>(buffer);
+    std::fwrite(data, sizeof(int), 1, m_file);
+    if (freturn == true) {
+      std::fseek(m_file, m_returnOffset, SEEK_SET);
+    }
 	}
-	else {
-		if (freturn == true) {
-			m_returnOffset = ftell(m_file);
-		}
-		std::fseek(m_file, offset, SEEK_SET);
-		std::fwrite(reinterpret_cast<const void*>(byte), sizeof(int), 1, m_file);
-		if (freturn == true) {
-			std::fseek(m_file, m_returnOffset, SEEK_SET);
-		}
-	}
+  else {
+    if (freturn == true) {
+      m_returnOffset = ftell(m_file);
+    }
+    std::fseek(m_file, offset, SEEK_SET);
+    int buffer[1];
+    buffer[0] = byte;
+    const void* data = reinterpret_cast<const void*>(buffer);
+    std::fwrite(data, sizeof(int), 1, m_file);
+    if (freturn == true) {
+      std::fseek(m_file, m_returnOffset, SEEK_SET);
+    }
+  }
 	return EXIT_SUCCESS;
 }
