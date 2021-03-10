@@ -16,8 +16,8 @@ int main() {
   else {
     file.openFile("example.dat");
   }
-  file.writeInt(0xFFFFFFFF, -1, true);
-
+  file.writeInt(0xAABBCCDD, -1, false);
+  file.writeInt(0xDDCCBBAA, -1, false);
   file.closeFile();
   return 0;
 }

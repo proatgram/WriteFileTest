@@ -47,7 +47,7 @@ int rrFile::flushStream() {
       }
       return EOF;
     }
-    return 0x02;
+    
   }
   return EXIT_SUCCESS;
 }
@@ -110,6 +110,7 @@ std::string rrFile::readString(const int offset, const bool freturn) {
 	return result;
 }
 int rrFile::writeByteStream(const int8_t* rawArray, const uint32_t arraySize, const int offset, const bool freturn) {
+
 	if (offset == -1) {
 		if (freturn == true) {
 			m_returnOffset = std::ftell(m_file);
@@ -170,7 +171,11 @@ int rrFile::readByteStream(std::vector<int8_t>& vectorName, const uint32_t numBy
 	return EXIT_SUCCESS;
 }
 int rrFile::writeInt(const int byte, const int offset, const bool freturn) {
-	if (offset == -1) {
+	if (byte > 0xFFFFFFFF) {
+    return 0x01;
+  }
+  
+  if (offset == -1) {
 		if (freturn == true) {
 			m_returnOffset = std::ftell(m_file);
 		}
@@ -196,4 +201,21 @@ int rrFile::writeInt(const int byte, const int offset, const bool freturn) {
     }
   }
 	return EXIT_SUCCESS;
+}
+int rrFile::readInt(const int offset, const int freturn) {
+  if (offset == -1) {
+    if (freturn) {
+      m_returnOffset = std::ftell(m_file);
+    }
+    int data;
+    if ((data = std::getc(m_file)) != EOF) {
+      if (freturn == true) {
+        std:fseek(m_file, m_returnOffset, SEEK_SET);
+      }
+      
+    }
+  }
+  else {
+
+  }
 }
