@@ -200,7 +200,6 @@ int rrFile::writeInt(const int byte, const int offset, const bool freturn) {
 	return EXIT_SUCCESS;
 }
 int rrFile::readInt(const int offset, const bool freturn) {
-  std::vector<int8_t>  vector;
   if (offset == -1) {
     if (freturn) {
       m_returnOffset = std::ftell(m_file);
@@ -224,7 +223,7 @@ int rrFile::readInt(const int offset, const bool freturn) {
     std::fseek(m_file, offset, SEEK_SET);
     int8_t data;
     int output = 0;
-    for (uint8_t times = 0x00; times < 0x04; times++) {
+    for (uint8_t times = 0x00; times != 0x05; times++) {
       if((data = std::getc(m_file)) != EOF) {
         output |= ((data & 0xFF) << (times * 8));
       }
@@ -317,5 +316,38 @@ int rrFile::writeInt16(const int16_t byte, const int offset, const bool freturn)
       std::fseek(m_file, m_returnOffset, SEEK_SET);
       
     }
+  }
+  return EXIT_SUCCESS;
+}
+int16_t rrFile::readInt16(const int offset, const bool freturn) {
+  if (offset == -1) {
+    int16_t data; 
+    int output = 0;
+    for (uint8_t times = 0x00; times != 0x03; times++) {
+      if ((data = std::getc(m_file)) != EOF) {
+        output |= ((data & 0xFF) << (times * 8));
+      }
+    }
+    if (freturn == true) {
+      std::fseek(m_file, m_returnOffset, SEEK_SET);
+    }
+    return output;
+  }
+  else {
+    if (freturn == true) {
+      m_returnOffset = std::ftell(m_file);
+    }
+    std::fseek(m_file, offset, SEEK_SET);
+    int16_t data;
+    int output = 0;
+    for (uint8_t times = 0x00; times != 0x03; times++) {
+      if((data = std::getc(m_file)) != EOF) {
+        output |= ((data & 0xFF) << (times * 8));
+      }
+    }
+    if (freturn == true) {
+      std::fseek(m_file, m_returnOffset, SEEK_SET);
+    }
+    return output;
   }
 }
