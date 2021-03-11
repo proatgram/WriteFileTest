@@ -171,10 +171,7 @@ int rrFile::readByteStream(std::vector<int8_t>& vectorName, const uint32_t numBy
 	return EXIT_SUCCESS;
 }
 int rrFile::writeInt(const int byte, const int offset, const bool freturn) {
-	if (byte > 0xFFFFFFFF) {
-    return 0x01;
-  }
-  
+
   if (offset == -1) {
 		if (freturn == true) {
 			m_returnOffset = std::ftell(m_file);
@@ -209,14 +206,14 @@ int rrFile::readInt(const int offset, const int freturn) {
       m_returnOffset = std::ftell(m_file);
     }
     int8_t data; 
-    int output;
-    for (uint8_t times = 0x00; times != 0x04; times++) {
+    int output = 0;
+    for (uint8_t times = 0x00; times < 0x04; times++) {
       if ((data = std::getc(m_file)) != EOF) {
-        output << data;
+        output |= ((data & 0xFF) << (times * 8));
       }
     }
     if (freturn == true) {
-      std:fseek(m_file, m_returnOffset, SEEK_SET);
+      std::fseek(m_file, m_returnOffset, SEEK_SET);
     }
     return output;
   }
@@ -226,10 +223,10 @@ int rrFile::readInt(const int offset, const int freturn) {
     }
     std::fseek(m_file, offset, SEEK_SET);
     int8_t data;
-    int output;
-    for (uint8_t times = 0x00; times != 0x04; times++) {
+    int output = 0;
+    for (uint8_t times = 0x00; times < 0x04; times++) {
       if((data = std::getc(m_file)) != EOF) {
-        output << data;
+        output |= ((data & 0xFF) << (times * 8));
       }
     }
     if (freturn == true) {

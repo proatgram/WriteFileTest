@@ -29,7 +29,7 @@ public:
 
     int writeInt(const int byte, const int offset, const bool freturn);
 
-    int readInt(const int offset, const int freturn);
+    int readInt(const int offset, const bool freturn);
 
     int writeInt8(const int8_t byte, const int offset, const bool freturn);
 

@@ -17,7 +17,7 @@ int main() {
     file.openFile("example.dat");
   }
   file.writeInt(0xAABBCCDD, -1, false);
-  file.writeInt(0xDDCCBBAA, -1, false);
+  std::printf("Data written: 0x%x\n", file.readInt(0, false));
   file.closeFile();
   return 0;
 }
