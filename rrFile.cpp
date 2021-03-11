@@ -203,19 +203,38 @@ int rrFile::writeInt(const int byte, const int offset, const bool freturn) {
 	return EXIT_SUCCESS;
 }
 int rrFile::readInt(const int offset, const int freturn) {
+  std::vector<int8_t>  vector;
   if (offset == -1) {
     if (freturn) {
       m_returnOffset = std::ftell(m_file);
     }
-    int data;
-    if ((data = std::getc(m_file)) != EOF) {
-      if (freturn == true) {
-        std:fseek(m_file, m_returnOffset, SEEK_SET);
+    int8_t data; 
+    int output;
+    for (uint8_t times = 0x00; times != 0x04; times++) {
+      if ((data = std::getc(m_file)) != EOF) {
+        output << data;
       }
-      
     }
+    if (freturn == true) {
+      std:fseek(m_file, m_returnOffset, SEEK_SET);
+    }
+    return output;
   }
   else {
-
+    if (freturn == true) {
+      m_returnOffset = std::ftell(m_file);
+    }
+    std::fseek(m_file, offset, SEEK_SET);
+    int8_t data;
+    int output;
+    for (uint8_t times = 0x00; times != 0x04; times++) {
+      if((data = std::getc(m_file)) != EOF) {
+        output << data;
+      }
+    }
+    if (freturn == true) {
+      std::fseek(m_file, m_returnOffset, SEEK_SET);
+    }
+    return output;
   }
 }
