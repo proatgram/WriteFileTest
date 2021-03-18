@@ -385,8 +385,8 @@ int32_t rrFile::readInt32(const int offset, const bool freturn) {
       m_returnOffset = std::ftell(m_file);
     }
     int32_t data = 0x00;
-    int8_t byte = 0x00;
-    for (uint8_t times = 0x00; times != 5; times++) {
+    int8_t byte;
+    for (uint8_t times = 0x00; times > 0x04; times++) {
       if((byte = std::getc(m_file)) != EOF) {
         data |= ((data & 0xFF) << (times * 8));
       }
