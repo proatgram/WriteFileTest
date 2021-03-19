@@ -339,7 +339,7 @@ int16_t rrFile::readInt16(const int offset, const bool freturn) {
     }
     std::fseek(m_file, offset, SEEK_SET);
     int16_t data;
-    int output = 0;
+    int output = 0x00;
     for (uint8_t times = 0x00; times != 0x03; times++) {
       if((data = std::getc(m_file)) != EOF) {
         output |= ((data & 0xFF) << (times * 8));
@@ -386,9 +386,9 @@ int32_t rrFile::readInt32(const int offset, const bool freturn) {
     }
     int32_t data = 0x00;
     int8_t byte;
-    for (uint8_t times = 0x00; times > 0x04; times++) {
+    for (uint8_t times = 0x00; times != 0x05; times++) {
       if((byte = std::getc(m_file)) != EOF) {
-        data |= ((data & 0xFF) << (times * 8));
+        data |= ((byte & 0xFF) << (times * 8));
       }
     }
     if (freturn ==  true) {
@@ -402,15 +402,44 @@ int32_t rrFile::readInt32(const int offset, const bool freturn) {
     }
     std::fseek(m_file, offset, SEEK_SET);
     int32_t data = 0x00;
-    int8_t byte = 0x00;
+    int8_t byte;
     for (uint8_t times = 0x00; times != 0x05; times++) {
       if ((byte = std::getc(m_file)) != EOF) {
-        data |= ((data & 0xFF) << (times * 8));
+        data |= ((byte & 0xFF) << (times * 8));
       }
     }
     if (freturn == true) {
       std::fseek(m_file, m_returnOffset, SEEK_SET);
     }
+    return data;
   }
   return EXIT_SUCCESS;
+}
+int rrFile::writeInt64(const int64_t byte, const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		int64_t data[1];
+		data[0] = byte;
+		const void* newData = reinterpret_cast<const void*>(data);
+		std::fwrite(newData, sizeof(int64_t), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int64_t data[1];
+		data[0] = byte;
+		const void* newData = reinterpret_cast<const void*>(data);
+		std::fwrite(newData, sizeof(int64_t), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+	}
+	return EXIT_SUCCESS;
 }
