@@ -16,8 +16,15 @@ int main() {
   else {
     file.openFile("example.dat");
   }
-  file.writeInt64(0x7FFFFFFFFFFFFFFF, -1, false);
-  std::printf("END \n");
+  file.writeInt64(0x7FFFFFFFFFFFFFFF, -1, true);
+  int64_t dataTest = file.readInt64(-1, false);
+  if ((dataTest & 0xFFFFFFFFFFFFFFFF) == 0x7FFFFFFFFFFFFFFF) {
+    std::printf("Yes, it equals 0x7FFFFFFFFFFFFFFF \n");
+  }
+  else {
+    std:printf("No, it does not equal 0x7FFFFFFFFFFFFFFF \n");
+    std::printf("It equals 0x%x \n", (dataTest & 0xFFFFFFFFFFFFFFFF));
+  }
   file.closeFile();
   return 0;
 }
