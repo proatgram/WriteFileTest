@@ -6,7 +6,6 @@
 #include <errno.h>
 #include "rrFile.h"
 
-
 int main() {
   rrFile file;
   if (file.openFile("example.dat") == EXIT_FAILURE) {
@@ -22,8 +21,8 @@ int main() {
     std::printf("Yes, it equals 0x7FFFFFFFFFFFFFFF \n");
   }
   else {
-    std:printf("No, it does not equal 0x7FFFFFFFFFFFFFFF \n");
-    std::printf("It equals 0x%x \n", (dataTest & 0xFFFFFFFFFFFFFFFF));
+    std::printf("No, it does not equal 0x7FFFFFFFFFFFFFFF \n");
+    //std::printf("It equals 0x%xl \n", (dataTest ));
   }
   file.closeFile();
   return 0;

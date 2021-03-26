@@ -449,9 +449,9 @@ int64_t rrFile::readInt64(const int offset, const bool freturn) {
       m_returnOffset = std::ftell(m_file);
     }
     int64_t data = 0x00;
-    int8_t byte = 0x00;
-    for (uint8_t times = 0x00; times != 0x09; times++) {
-      if ((byte = std::getc(m_file)) != EOF) {
+    int8_t byte;
+    for (uint8_t times = 0x00; times < 0x08; times++) {
+      if ((byte = std::getc(m_file)) ) {
         data |= ((byte & 0xFF) << (times * 0x08));
       }
     }
@@ -478,5 +478,5 @@ int64_t rrFile::readInt64(const int offset, const bool freturn) {
     }
     return data;
   }
-  return EXIT_SUCCESS;
+  return EXIT_FAILURE;
 }
