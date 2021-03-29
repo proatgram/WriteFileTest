@@ -477,7 +477,7 @@ int64_t rrFile::readInt64(const int offset, const bool freturn) {
     for (uint8_t times = 0x00; times != 0x09; times++) {
       std::fseek(m_file, 0x00, SEEK_SET);
       if ((byte = std::getc(m_file)) != EOF) {
-        data |= ((byte & 0xFF) << (times * 0x08));
+        data |= ((byte & 0xFFul) << (times * 0x08ul));
       }
     }
     if (freturn == true) {
