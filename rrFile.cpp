@@ -449,16 +449,23 @@ int64_t rrFile::readInt64(const int offset, const bool freturn) {
       m_returnOffset = std::ftell(m_file);
     }
     int64_t data = 0x00;
-    int8_t byte;
+    uint8_t byte;
+    union
+    {
+       int64_t data;
+       uint8_t buf[sizeof(int64_t)];
+    }conv;
+
     for (uint8_t times = 0x00; times < 0x08; times++) {
-      if ((byte = std::getc(m_file)) ) {
-        data |= ((byte & 0xFF) << (times * 0x08));
+      if ((byte = std::getc(m_file)) == EOF) {
+         break;
       }
+      conv.buf[times] = byte;
     }
     if (freturn == true) {
       std::fseek(m_file, m_returnOffset, SEEK_SET);
     }
-    return data;
+    return conv.data;
   }
   else {
     if (freturn == true) {

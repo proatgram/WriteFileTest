@@ -22,7 +22,11 @@ int main() {
   }
   else {
     std::printf("No, it does not equal 0x7FFFFFFFFFFFFFFF \n");
-    //std::printf("It equals 0x%xl \n", (dataTest ));
+    for(int i = 0; i < 8; i++)
+    {
+       printf("%02X", (uint8_t)(dataTest >> (8*i)) & 0xFF);
+    }
+    printf("\n");
   }
   file.closeFile();
   return 0;
