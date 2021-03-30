@@ -15,19 +15,8 @@ int main() {
   else {
     file.openFile("example.dat");
   }
-  file.writeInt64(0x7FFFFFFFFFFFFFFF, -1, true);
-  int64_t dataTest = file.readInt64(-1, false);
-  if ((dataTest & 0xFFFFFFFFFFFFFFFF) == 0x7FFFFFFFFFFFFFFF) {
-    std::printf("Yes, it equals 0x7FFFFFFFFFFFFFFF \n");
-  }
-  else {
-    std::printf("No, it does not equal 0x7FFFFFFFFFFFFFFF \n");
-    for(int i = 0; i < 8; i++)
-    {
-       printf("%02X", (uint8_t)(dataTest >> (8*i)) & 0xFF);
-    }
-    printf("\n");
-  }
+  file.writeuInt8(0xFF, -1, true);
+  std::printf("Data: 0x%x \n ", file.readuInt8(-1, false));
   file.closeFile();
   return 0;
 }

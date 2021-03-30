@@ -1,3 +1,4 @@
+
 #include <cstdio>
 #include <string>
 #include <cstdint>
@@ -47,21 +48,21 @@ public:
 
     int64_t readInt64(const int offset, const bool freturn);
 
-    int writeuInt8_t(const uint8_t byte, const int offset, const bool freturn);
+    int writeuInt8(const uint8_t byte, const int offset, const bool freturn);
 
-    uint8_t readuInt8_t(const int offset, const bool freturn);
+    uint8_t readuInt8(const int offset, const bool freturn);
 
-    int writeuInt16_t(const uint16_t byte, const int offset, const bool freturn);
+    int writeuInt16(const uint16_t byte, const int offset, const bool freturn);
 
-    uint16_t readuInt16_t(const int offset, const bool freturn);
+    uint16_t readuInt16(const int offset, const bool freturn);
 
-    int writeuInt32_t(const uint32_t byte, const int offset, const bool freturn);
+    int writeuInt32(const uint32_t byte, const int offset, const bool freturn);
 
-    uint32_t readuInt32_t(const int offset, const bool freturn);
+    uint32_t readuInt32(const int offset, const bool freturn);
 
-    int writeuInt64_t(const uint64_t byte, const int offset, const bool freturn);
+    int writeuInt64(const uint64_t byte, const int offset, const bool freturn);
 
-    uint64_t readuInt64_t(const int offset, const bool freturn);
+    uint64_t readuInt64(const int offset, const bool freturn);
 
     int writeChar(const char* character, const int offset, const bool freturn);
 
