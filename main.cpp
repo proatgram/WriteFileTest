@@ -15,8 +15,8 @@ int main() {
   else {
     file.openFile("example.dat");
   }
-  file.writeuInt8(0xFF, -1, true);
-  std::printf("Data: 0x%x \n ", file.readuInt8(-1, false));
+  file.writeuInt16(0xFFAA, -1, true);
+  std::printf("Data: 0x%x \n", file.readuInt16(-1, false));
   file.closeFile();
-  return 0;
+  return 0x00;
 }
