@@ -742,7 +742,7 @@ uint64_t rrFile::readuInt64(const int offset, const bool freturn) {
 			std::printf("Position: 0x%x ", std::ftell(m_file));
 			if ((byte = std::getc(m_file)) != EOF) {
 				input.in[times] = byte;
-				std::printf("Byte: 0x%x Data: 0x%x \n", input.in[times], input.output);
+				std::printf("Byte: 0x%x Data: 0x%llx \n", input.in[times], input.output);
 			}
 		}
 		if (freturn == true) {
@@ -755,17 +755,20 @@ uint64_t rrFile::readuInt64(const int offset, const bool freturn) {
 			m_returnOffset = std::ftell(m_file);
 		}
 		std::fseek(m_file, offset, SEEK_SET);
+		union {
+			uint8_t in[8];
+			uint64_t output = 0x000000000000000000;
+		}input;
 		uint8_t byte;
-		uint64_t data = 0x0000000000000000u;
 		for (uint8_t times = 0x00; times != 0x09; times++) {
 			if ((byte = std::getc(m_file)) != EOF) {
-				data |= ((byte & 0xFFul) << (times * 0x08ul));
+				input.in[times] = byte;
 			}
 		}
 		if (freturn == true) {
 			std::fseek(m_file, m_returnOffset, SEEK_SET);
 		}
-		return data;
+		return input.output;
 	}
 	return EXIT_FAILURE;
 }
