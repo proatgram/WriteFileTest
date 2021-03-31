@@ -742,7 +742,7 @@ uint64_t rrFile::readuInt64(const int offset, const bool freturn) {
 			std::printf("Position: 0x%x ", std::ftell(m_file));
 			if ((byte = std::getc(m_file)) != EOF) {
 				input.in[times] = byte;
-				std::printf("Byte: 0x%x Data \n", input.in[times], input.output);
+				std::printf("Byte: 0x%x Data: 0x%x \n", input.in[times], input.output);
 			}
 		}
 		if (freturn == true) {
