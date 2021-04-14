@@ -476,7 +476,7 @@ int64_t rrFile::readInt64(const int offset, const bool freturn) {
 
     for (uint8_t times = 0x00; times < 0x08; times++) {
       if ((byte = std::getc(m_file)) == EOF) {
-         break;
+        break;
       }
       conv.buf[times] = byte;
     }
@@ -490,18 +490,21 @@ int64_t rrFile::readInt64(const int offset, const bool freturn) {
       m_returnOffset = std::getc(m_file);
     }
     std::fseek(m_file, offset, SEEK_SET);
-    int64_t data = 0x00;
     int8_t byte;
+    union {
+		int64_t data;
+		uint8_t buf[sizeof(int64_t)];
+	}conv;
     for (uint8_t times = 0x00; times != 0x09; times++) {
-      std::fseek(m_file, 0x00, SEEK_SET);
-      if ((byte = std::getc(m_file)) != EOF) {
-        data |= ((byte & 0xFFul) << (times * 0x08ul));
+      if ((byte = std::getc(m_file)) == EOF) {
+        break;
       }
+	  conv.buf[times] = byte;
     }
     if (freturn == true) {
       std::fseek(m_file, m_returnOffset, SEEK_SET);
     }
-    return data;
+    return conv.data;
   }
   return EXIT_FAILURE;
 }
@@ -739,10 +742,8 @@ uint64_t rrFile::readuInt64(const int offset, const bool freturn) {
 		}input;
 		uint8_t byte;
 		for (uint8_t times = 0x00; times != 0x09; times++) {
-			std::printf("Position: 0x%x ", std::ftell(m_file));
 			if ((byte = std::getc(m_file)) != EOF) {
 				input.in[times] = byte;
-				std::printf("Byte: 0x%x Data: 0x%llx \n", input.in[times], input.output);
 			}
 		}
 		if (freturn == true) {
@@ -771,4 +772,39 @@ uint64_t rrFile::readuInt64(const int offset, const bool freturn) {
 		return input.output;
 	}
 	return EXIT_FAILURE;
+}
+int rrFile::writeChar(const char character, const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		char buffer[1];
+		buffer[0] = character;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(char), 0x01, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		const void* data = reinterpret_cast<const void*>(character);
+		std::fwrite(data, sizeof(char), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
+}
+char rrFile::readChar(const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+	}
 }

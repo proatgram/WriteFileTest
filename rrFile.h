@@ -64,7 +64,7 @@ public:
 
     uint64_t readuInt64(const int offset, const bool freturn);
 
-    int writeChar(const char* character, const int offset, const bool freturn);
+    int writeChar(const char character, const int offset, const bool freturn);
 
     char readChar(const int offset, const bool freturn);
 
