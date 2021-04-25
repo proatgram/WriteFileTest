@@ -809,6 +809,8 @@ int rrFile::writeChar(const char character, const int offset, const bool freturn
 			m_returnOffset = std::ftell(m_file);
 		}
 		std::fseek(m_file, offset, SEEK_SET);
+		char buffer[1];
+		buffer[0] = character;
 		const void* data = reinterpret_cast<const void*>(character);
 		std::fwrite(data, sizeof(char), 1, m_file);
 		if (freturn == true) {
@@ -824,7 +826,7 @@ char rrFile::readChar(const int offset, const bool freturn) {
 			m_returnOffset = std::ftell(m_file);
 		}
 		union {
-			char data;
+			char data = 0x00;
 			uint8_t input[sizeof(char)];
 		}output;
 		uint8_t tmp;
@@ -848,7 +850,7 @@ char rrFile::readChar(const int offset, const bool freturn) {
 		}
 		std::fseek(m_file, offset, SEEK_SET);
 		union {
-			char data;
+			char data = 0x00;
 			uint8_t input[sizeof(char)];
 		}output;
 		uint8_t tmp;
@@ -865,6 +867,90 @@ char rrFile::readChar(const int offset, const bool freturn) {
 		if (freturn == true) {
 			std::fseek(m_file, m_returnOffset, SEEK_SET);
 		}
+		return output.data;
 	}
 	return '0' + EXIT_FAILURE;
+}
+
+int rrFile::writeFloat(const float data, const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		float buffer[1];
+		buffer[0] = data;
+		const void* output = reinterpret_cast<const void*>(buffer);
+		std::fwrite(output, sizeof(float), 0x01, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		float buffer[1];
+		buffer[0] = data;
+		const void* output = reinterpret_cast<const void*>(buffer);
+		std::fwrite(output, sizeof(float), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
+}
+
+float rrFile::readFloat(const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		union {
+			float data = 0x00f;
+			uint8_t input[sizeof(float)];
+		}output;
+		uint8_t tmp;
+		for (uint8_t times = 0x00; times < sizeof(float); times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = FLT_MAX;
+				break;
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		union {
+			float data = 0x00f;
+			uint8_t input[sizeof(float)];
+		}output;
+		uint8_t tmp;
+		for (uint8_t times = 0x00; times < sizeof(float); times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = FLT_MAX;
+				break;
+			}
+
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	return EXIT_FAILURE;
 }

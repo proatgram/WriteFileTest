@@ -15,9 +15,9 @@ int main() {
   else {
     file.openFile("example.dat");
   }
-  file.writeChar('C', -1, false);
-  char data = file.readChar(-1, true);
-  std::printf("Char in file: %c", data);
+  file.writeFloat(0.123456f, -1, false);
+  float data = file.readFloat(0, false);
+  std::printf("Char in file: %f \n", data);
   file.closeFile();
   return EXIT_SUCCESS;
 }
