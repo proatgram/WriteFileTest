@@ -6,15 +6,15 @@
 #include <errno.h>
 
 int rrFile::createFile(const char* fileName) {
-    FILE* newFile = std::fopen(fileName, "wb+");
-    if (!newFile) {
+	FILE* newFile = std::fopen(fileName, "wb+");
+	if (!newFile) {
 		return EXIT_FAILURE;
-    }
-    else {
+	}
+	else {
 		std::fclose(newFile);
 		return EXIT_SUCCESS;
-     }
-     return EXIT_FAILURE;
+	}
+	return EXIT_FAILURE;
 }
 
 int rrFile::openFile(const char* fileName) {
@@ -32,26 +32,26 @@ int rrFile::closeFile() {
 	m_file = nullptr;
 	return EXIT_SUCCESS;
 }
-int rrFile::removeFile(const char *fileName) {
-  if (remove(fileName) != 0x00) {
-    return EXIT_FAILURE;
-  }
-  else {
-    return EXIT_SUCCESS;
-  }
-  return EXIT_FAILURE;
+int rrFile::removeFile(const char* fileName) {
+	if (remove(fileName) != 0x00) {
+		return EXIT_FAILURE;
+	}
+	else {
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
 }
 int rrFile::flushStream() {
-  if (std::fflush(m_file) != 0x00) {
-    if (std::feof(m_file) != 0x00) {
-      if (std::ferror(m_file) != 0x00) {
-        return EXIT_FAILURE;
-      }
-      return EOF;
-    }
-    
-  }
-  return EXIT_SUCCESS;
+	if (std::fflush(m_file) != 0x00) {
+		if (std::feof(m_file) != 0x00) {
+			if (std::ferror(m_file) != 0x00) {
+				return EXIT_FAILURE;
+			}
+			return EOF;
+		}
+
+	}
+	return EXIT_SUCCESS;
 }
 int rrFile::writeString(const std::string& string, const int offset, const bool freturn) {
 	const uint8_t zero = 0x00;
@@ -182,266 +182,266 @@ int rrFile::readByteStream(std::vector<int8_t>& vectorName, const uint32_t numBy
 }
 int rrFile::writeInt(const int byte, const int offset, const bool freturn) {
 
-  if (offset == -1) {
+	if (offset == -1) {
 		if (freturn == true) {
 			m_returnOffset = std::ftell(m_file);
 		}
-    int buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int), 1, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int), 1, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  return EXIT_FAILURE;
+		int buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
 }
 int rrFile::readInt(const int offset, const bool freturn) {
-  if (offset == -1) {
-    if (freturn) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    int8_t data; 
-    int output = 0;
-    for (uint8_t times = 0x00; times != 0x05; times++) {
-      if ((data = std::getc(m_file)) != EOF) {
-        output |= ((data & 0xFF) << (times * 8));
-      }
-    }
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return output;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int8_t data;
-    int output = 0;
-    for (uint8_t times = 0x00; times != 0x05; times++) {
-      if((data = std::getc(m_file)) != EOF) {
-        output |= ((data & 0xFF) << (times * 8));
-      }
-    }
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return output;
-  }
+	if (offset == -1) {
+		if (freturn) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		int8_t data;
+		int output = 0;
+		for (uint8_t times = 0x00; times != 0x05; times++) {
+			if ((data = std::getc(m_file)) != EOF) {
+				output |= ((data & 0xFF) << (times * 8));
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int8_t data;
+		int output = 0;
+		for (uint8_t times = 0x00; times != 0x05; times++) {
+			if ((data = std::getc(m_file)) != EOF) {
+				output |= ((data & 0xFF) << (times * 8));
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output;
+	}
 }
 int rrFile::writeInt8(const int8_t byte, const int offset, const bool freturn) {
-  if (offset == -1) {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    int8_t buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int8_t), 1, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int8_t buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int8_t), 1, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  return EXIT_FAILURE;
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		int8_t buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int8_t), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int8_t buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int8_t), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
 }
 int8_t rrFile::readInt8(const int offset, const bool freturn) {
-  if (offset == -1) {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    int8_t tmp;
-	int8_t data = 0x00;
-	if ((tmp = std::getc(m_file)) != EOF) {
-		data = tmp;
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		int8_t tmp;
+		int8_t data = 0x00;
+		if ((tmp = std::getc(m_file)) != EOF) {
+			data = tmp;
+		}
+		else {
+			data = INT8_MAX;
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return data;
 	}
 	else {
-		data = INT8_MAX;
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int8_t tmp;
+		int8_t data = 0x00;
+		if ((tmp = std::getc(m_file)) != EOF) {
+			data = tmp;
+		}
+		else {
+			data = INT8_MAX;
+		}
+
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return data;
 	}
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return data;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int8_t tmp;
-	int8_t data = 0x00;
-	if ((tmp = std::getc(m_file)) != EOF) {
-		data = tmp;
-	}
-	else {
-		data = INT8_MAX;
-	}
-    
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return data;
-  }
-  return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 int rrFile::writeInt16(const int16_t byte, const int offset, const bool freturn) {
-  if (offset == -1) {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    int16_t buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int16_t), 1, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int16_t buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int16_t), 1, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  return EXIT_FAILURE;
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		int16_t buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int16_t), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int16_t buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int16_t), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
 }
 int16_t rrFile::readInt16(const int offset, const bool freturn) {
-  if (offset == -1) {
-    int16_t data; 
-    int output = 0;
-    for (uint8_t times = 0x00; times != 0x03; times++) {
-      if ((data = std::getc(m_file)) != EOF) {
-        output |= ((data & 0xFF) << (times * 8));
-      }
-    }
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return output;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int16_t data;
-    int output = 0x00;
-    for (uint8_t times = 0x00; times != 0x03; times++) {
-      if((data = std::getc(m_file)) != EOF) {
-        output |= ((data & 0xFF) << (times * 0x08));
-      }
-    }
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return output;
-  }
+	if (offset == -1) {
+		int16_t data;
+		int output = 0;
+		for (uint8_t times = 0x00; times != 0x03; times++) {
+			if ((data = std::getc(m_file)) != EOF) {
+				output |= ((data & 0xFF) << (times * 8));
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int16_t data;
+		int output = 0x00;
+		for (uint8_t times = 0x00; times != 0x03; times++) {
+			if ((data = std::getc(m_file)) != EOF) {
+				output |= ((data & 0xFF) << (times * 0x08));
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output;
+	}
 }
 int rrFile::writeInt32(const int32_t byte, const int offset, const bool freturn) {
-  if (offset == -1) {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    int32_t buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int32_t), 0x01, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int32_t buffer[1];
-    buffer[0] = byte;
-    const void* data = reinterpret_cast<const void*>(buffer);
-    std::fwrite(data, sizeof(int32_t), 0x01, m_file);
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return EXIT_SUCCESS;
-  }
-  return EXIT_FAILURE;
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		int32_t buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int32_t), 0x01, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int32_t buffer[1];
+		buffer[0] = byte;
+		const void* data = reinterpret_cast<const void*>(buffer);
+		std::fwrite(data, sizeof(int32_t), 0x01, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
 }
 int32_t rrFile::readInt32(const int offset, const bool freturn) {
-  if (offset == -1) {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    int32_t data = 0x00;
-    int8_t byte;
-    for (uint8_t times = 0x00; times != 0x05; times++) {
-      if((byte = std::getc(m_file)) != EOF) {
-        data |= ((byte & 0xFF) << (times * 0x08));
-      }
-    }
-    if (freturn ==  true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return data;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::ftell(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    int32_t data = 0x00;
-    int8_t byte;
-    for (uint8_t times = 0x00; times != 0x05; times++) {
-      if ((byte = std::getc(m_file)) != EOF) {
-        data |= ((byte & 0xFF) << (times * 0x08));
-      }
-    }
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return data;
-  }
-  return EXIT_SUCCESS;
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		int32_t data = 0x00;
+		int8_t byte;
+		for (uint8_t times = 0x00; times != 0x05; times++) {
+			if ((byte = std::getc(m_file)) != EOF) {
+				data |= ((byte & 0xFF) << (times * 0x08));
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return data;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		int32_t data = 0x00;
+		int8_t byte;
+		for (uint8_t times = 0x00; times != 0x05; times++) {
+			if ((byte = std::getc(m_file)) != EOF) {
+				data |= ((byte & 0xFF) << (times * 0x08));
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return data;
+	}
+	return EXIT_SUCCESS;
 }
 int rrFile::writeInt64(const int64_t byte, const int offset, const bool freturn) {
 	if (offset == -1) {
@@ -474,56 +474,56 @@ int rrFile::writeInt64(const int64_t byte, const int offset, const bool freturn)
 	return EXIT_FAILURE;
 }
 int64_t rrFile::readInt64(const int offset, const bool freturn) {
-  if (offset == -1) {
-    if (freturn == true) {
-      m_returnOffset = std ::ftell(m_file);
-    }
-    union {
-       int64_t data;
-       uint8_t input[sizeof(int64_t)];
-    }output;
-	uint8_t tmp;
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		union {
+			int64_t data;
+			uint8_t input[sizeof(int64_t)];
+		}output;
+		uint8_t tmp;
 
-    for (uint8_t times = 0x00; times < 0x08; times++) {
-      if ((tmp = std::getc(m_file)) != EOF) {
-        output.input[times] = tmp;
-      }
-	  else {
-		  output.data = INT64_MAX;
-		  break;
-	  }
-      
-    }
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return output.data;
-  }
-  else {
-    if (freturn == true) {
-      m_returnOffset = std::getc(m_file);
-    }
-    std::fseek(m_file, offset, SEEK_SET);
-    union {
-		int64_t data = 0x00;
-		uint8_t input[sizeof(int64_t)];
-	}output;
-	uint8_t tmp;
-    for (uint8_t times = 0x00; times < sizeof(int64_t); times++) {
-      if ((tmp = std::getc(m_file)) != EOF) {
-		output.input[times] = tmp;
-      }
-	  else {
-		  output.data = INT64_MAX;
-		  break;
-	  }
-    }
-    if (freturn == true) {
-      std::fseek(m_file, m_returnOffset, SEEK_SET);
-    }
-    return output.data;
-  }
-  return EXIT_FAILURE;
+		for (uint8_t times = 0x00; times < 0x08; times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = INT64_MAX;
+				break;
+			}
+
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::getc(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		union {
+			int64_t data = 0x00;
+			uint8_t input[sizeof(int64_t)];
+		}output;
+		uint8_t tmp;
+		for (uint8_t times = 0x00; times < sizeof(int64_t); times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = INT64_MAX;
+				break;
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	return EXIT_FAILURE;
 }
 int rrFile::writeuInt8(const uint8_t byte, const int offset, const bool freturn) {
 	if (offset == -1) {
@@ -558,11 +558,11 @@ int rrFile::writeuInt8(const uint8_t byte, const int offset, const bool freturn)
 uint8_t rrFile::readuInt8(const int offset, const bool freturn) {
 	if (offset == -1) {
 		if (freturn == true) {
-		m_returnOffset = std::ftell(m_file);
+			m_returnOffset = std::ftell(m_file);
 		}
 		uint8_t data = 0x00;
 		if ((data = std::getc(m_file)) != EOF) {
-			
+
 		}
 		if (freturn == true) {
 			std::fseek(m_file, m_returnOffset, SEEK_SET);
@@ -576,7 +576,7 @@ uint8_t rrFile::readuInt8(const int offset, const bool freturn) {
 		std::fseek(m_file, offset, SEEK_SET);
 		uint8_t data = 0x00;
 		if ((data = std::getc(m_file)) != EOF) {
-			
+
 		}
 		if (freturn == true) {
 			std::fseek(m_file, m_returnOffset, SEEK_SET);
@@ -752,7 +752,7 @@ uint64_t rrFile::readuInt64(const int offset, const bool freturn) {
 		if (freturn == true) {
 			m_returnOffset = std::ftell(m_file);
 		}
-		
+
 		union {
 			uint8_t in[8];
 			uint64_t output = 0x00000000000000000;
@@ -953,4 +953,201 @@ float rrFile::readFloat(const int offset, const bool freturn) {
 		return output.data;
 	}
 	return EXIT_FAILURE;
+}
+
+int rrFile::writeDouble(const double data, const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		double buffer[1];
+		buffer[0] = data;
+		const void* output = reinterpret_cast<const void*>(buffer);
+		std::fwrite(output, sizeof(double), 0x01, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		double buffer[1];
+		buffer[0] = data;
+		const void* output = reinterpret_cast<const void*>(buffer);
+		std::fwrite(output, sizeof(double), 1, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
+}
+
+double rrFile::readDouble(const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		union {
+			double data = 0x00;
+			uint8_t input[sizeof(double)];
+		}output;
+		uint8_t tmp;
+		for (uint8_t times = 0x00; times < sizeof(double); times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = DBL_MAX;
+				break;
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		union {
+			double data = 0x00;
+			uint8_t input[sizeof(double)];
+		}output;
+		uint8_t tmp;
+		for (uint8_t times = 0x00; times < sizeof(double); times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = DBL_MAX;
+				break;
+			}
+
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	return EXIT_FAILURE;
+}
+
+int rrFile::writelDouble(const long double data, const int offset, const bool freturn) {
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		long double buffer[1];
+		buffer[0] = data;
+		const void* output = reinterpret_cast<const void*>(buffer);
+		std::fwrite(output, sizeof(long double), 0x01, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		long double buffer[1];
+		buffer[0] = data;
+		const void* output = reinterpret_cast<const void*>(buffer);
+		std::fwrite(output, sizeof(long double), 0x01, m_file);
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return EXIT_SUCCESS;
+	}
+	return EXIT_FAILURE;
+}
+
+long double rrFile::readlDouble(const int offset, const bool freturn)
+{
+	if (offset == -1) {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		union {
+			long double data = 0x00;
+			uint8_t input[sizeof(long double)];
+		}output;
+		uint8_t tmp;
+		for (uint8_t times = 0x00; times < sizeof(long double); times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = LDBL_MAX;
+				break;
+			}
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	else {
+		if (freturn == true) {
+			m_returnOffset = std::ftell(m_file);
+		}
+		std::fseek(m_file, offset, SEEK_SET);
+		union {
+			long double data = 0x00;
+			uint8_t input[sizeof(long double)];
+		}output;
+		uint8_t tmp;
+		for (uint8_t times = 0x00; times < sizeof(long double); times++) {
+			if ((tmp = std::getc(m_file)) != EOF) {
+				output.input[times] = tmp;
+			}
+			else {
+				output.data = LDBL_MAX;
+				break;
+			}
+
+		}
+		if (freturn == true) {
+			std::fseek(m_file, m_returnOffset, SEEK_SET);
+		}
+		return output.data;
+	}
+	return EXIT_FAILURE;
+}
+
+int rrFile::writelInt(const long int data, const int offset, const bool freturn)
+{
+	return 0;
+}
+
+long int rrFile::readlInt(const int offset, const bool freturn)
+{
+	return 0;
+}
+
+int rrFile::writeulInt(const unsigned long int data, const int offset, const bool freturn)
+{
+	return 0;
+}
+
+unsigned long int rrFile::readulInt(const int offset, const bool freturn)
+{
+	return 0;
+}
+
+int rrFile::writellInt(const long long int data, const int offset, const bool freturn)
+{
+	return 0;
+}
+
+long long int rrFile::readllInt(const int offset, const int freturn)
+{
+	return 0;
 }
