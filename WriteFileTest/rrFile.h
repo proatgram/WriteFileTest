@@ -90,6 +90,11 @@ public:
 	int writellInt(const long long int data, const int offset, const bool freturn);
 
 	long long int readllInt(const int offset, const int freturn);
+
+	int writeullInt(const unsigned long long int data, const int offset, const bool freturn);
+
+	unsigned long long int readullIng(const int offset, const bool freturn);
+
 private:
 	int m_returnOffset;
 	FILE* m_file;

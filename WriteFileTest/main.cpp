@@ -15,9 +15,9 @@ int main() {
 	else {
 		file.openFile("example.dat");
 	}
-	file.writelDouble(0.1, -1, false);
-	long double data = file.readlDouble(0, false);
-	std::printf("Long double in file: %lf \n", data);
+	file.writelInt(10, -1, false); 
+	long int data = file.readlInt(0, false);
+	std::printf("Long Int in file: %ld \n", data);
 	file.closeFile();
 	return EXIT_SUCCESS;
 }
